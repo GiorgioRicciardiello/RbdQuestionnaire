@@ -1,0 +1,13 @@
+Feature,Mean Coefficient,Standard Error,config
+q1_rbd,4.834999732124066,,Full Questionnaire
+age,0.7456210887795349,,Full Questionnaire
+q4_constipation,0.5348390176550075,,Full Questionnaire
+q2_smell,0.2865667584801982,,Full Questionnaire
+q5_orthostasis,-0.05455956091987237,,Full Questionnaire
+gender,0.0,,Full Questionnaire
+q1_rbd,4.512418108068258,,Questionnaire Only
+q4_constipation,0.6014320327713342,,Questionnaire Only
+q2_smell,0.5234244162181659,,Questionnaire Only
+q5_orthostasis,-0.35346996195335545,,Questionnaire Only
+gender,0.5529514973811825,,Demographics
+age,0.411921797581324,,Demographics
