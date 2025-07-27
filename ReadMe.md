@@ -88,7 +88,7 @@ Generates ROC curves for various models and thresholds. It also applies post-pro
 * Top predictors: Q1 RBD (β = 1.84 ± 0.12), Q2 Smell (β = 0.91 ± 0.10), Age (β = -0.75 ± 0.08)
 
 <p align="center">
-  <img src="results/stage_one_two_pipeline/roc_stage_I.png" alt="Elastic Net Feature Importance" width="600"/>
+  <img src="results/best_model/elastic_net_model_coefficients.png" alt="Elastic Net Feature Importance" width="600"/>
 </p>
 
 ---
@@ -99,7 +99,7 @@ Generates ROC curves for various models and thresholds. It also applies post-pro
 * Separate plots with and without HLA veto rules for improved interpretability.
 
 <p align="center">
-  <img src="figures/roc_curves_main.png" alt="ROC Curves" width="600"/>
+  <img src="results/stage_one_two_pipeline/roc_stage_I.png" alt="ROC Curves" width="600"/>
 </p>
 
 ---
