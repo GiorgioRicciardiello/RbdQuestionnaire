@@ -1,134 +1,126 @@
-# iRBD Classification Project
-
-## Objective
-
-This project aims to classify individuals with isolated REM Sleep Behavior Disorder (iRBD) using machine learning models trained on questionnaire data and clinical features. We benchmark various modeling strategies (e.g., Elastic Net, XGBoost) and assess their performance using cross-validation and train/test split strategies. Additionally, we identify key predictive features and explore optimal decision thresholds tailored to clinical use cases.
-
-## Take Home
-This project demonstrates the feasibility and clinical relevance of using questionnaire data, complemented by demographic and biomarker information, to accurately identify individuals with isolated REM Sleep Behavior Disorder (iRBD). Our results show that machine learning models—particularly Elastic Net and XGBoost—achieve high diagnostic performance, with specificity consistently above 88% and sensitivity exceeding 73% across cross-validation and test scenarios. The models' ability to maintain strong performance even in reduced-feature configurations highlights their potential for scalable screening applications. These findings support the integration of cost-effective data-driven tools into early iRBD detection workflows, paving the way for proactive interventions in the prodromal phase of synucleinopathies.
-
-## Project Structure and Scripts
-
-Below is the execution order and description of each script:
+Here’s a complete **README.md** draft for your project. It combines the scientific background you provided with the structure and scripts from the uploaded files.
 
 ---
 
-### 1. `pre_process_questionnaire.py`
+# A Two-Stage Questionnaire and Actigraphy Protocol for Remote Detection of Isolated REM Sleep Behavior Disorder
 
-**Purpose:**
-Cleans and processes the raw questionnaire and clinical data. Outputs a structured and cleaned dataset used for all subsequent analyses.
+## Overview
 
-**Output:**
+This repository contains the code and analysis pipeline for the study:
 
-* `processed_data.csv`
+**"A Two-Stage Questionnaire and Actigraphy Protocol for Remote Detection of Isolated REM Sleep Behavior Disorder in a Multicenter Cohort."**
 
----
+The project integrates:
 
-### 2. `generate_table_one.py`
-
-**Purpose:**
-Generates descriptive statistics for the population and compares clinical/demographic features between iRBD and control groups using statistical tests.
-
-**Output:**
-
-* Summary table with p-values and effect sizes for each variable (`table_one.csv`)
-* Key variables include gender, age, RBD symptoms, smell loss, and constipation.
-* Significant variables (e.g., Q1 RBD `p < 1e-30`, Age `p = 0.0078`, Gender `p = 0.048`) suggest distinct clinical profiles between groups.
+1. **A 4-item screening questionnaire** (RBD symptoms, hyposmia, constipation, orthostatic symptoms).
+2. **Actigraphy-derived sleep features** extracted from wrist-worn AX6/AX3 accelerometers.
+3. **A machine learning pipeline** using nested cross-validation and hyperparameter optimization (Optuna) to train classifiers.
+4. **A two-stage screening protocol**: Stage 1 questionnaire → Stage 2 actigraphy confirmation.
 
 ---
 
-### 3. `main_full_and_cross_val.py`
+## Study Cohorts
 
-**Purpose:**
-Runs the two main evaluation strategies:
+* **Mount Sinai Sleep and Healthy Aging Study (SHAS)**: Questionnaire + wearable data (n=62).
+* **VascBrain cohort**: Wearable data (n=25).
+* **Stanford Sleep Center**: Questionnaire + wearable data (n=84; 63 clinic, 21 community).
+* **Stanford ADRC**: Wearable controls (n=78).
+* **Mount Sinai sleep clinics**: Questionnaire only (n=147).
 
-* **Stage I**: Full dataset split into training and test sets. Optimizes hyperparameters and reports classification metrics (AUC, specificity, sensitivity).
-* **Stage II**: 5-fold cross-validation on the entire dataset, reporting averaged performance.
-
-**Best Model Summary:**
-
-* **Stage I:** Elastic Net with full feature set
-  AUC = 0.928, Specificity = 0.892, Sensitivity = 0.742
-
-* **Stage II:** XGBoost (specificity-weighted)
-  AUC = 0.918 ± 0.021, Specificity = 0.884 ± 0.054, Sensitivity = 0.735 ± 0.057
-
-**Output:**
-
-* ROC curve plots for each model
-* Final test performance metrics
-* Optimal thresholds (`τ`) for sensitivity/specificity tradeoffs
+Inclusion: Age 40–80, no overt neurodegenerative disease. All iRBD cases were PSG-confirmed; controls with RBD-like symptoms but negative PSG were considered “mimics.”
 
 ---
 
-### 4. `optmize_xgboost_loss_weight.py`
+## Methods
 
-**Purpose:**
-Tunes the class weight parameter in XGBoost to maximize specificity while maintaining acceptable sensitivity. Outputs optimal weight for classification loss.
+### Questionnaire
 
----
+* **4 items**: RBD, hyposmia, constipation, orthostasis.
+* Responses: *No = 0, Don’t know = 0.5, Yes = 1*.
+* Models tested: Random Forest, LightGBM, XGBoost, Elastic Net.
 
-### 5. `roc_curve_plots_veto_tresh.py`
+### Actigraphy
 
-**Purpose:**
-Generates ROC curves for various models and thresholds. It also applies post-processing “veto” rules (e.g., applying HLA biomarker exclusion) and visualizes changes in classification performance.
+* Devices: **Axivity AX6 (50 Hz, ±8g)** and **AX3 (100 Hz)**.
+* Nights recorded: **6,620 nights** across 78 iRBD and 158 controls.
+* Features extracted (n=113):
 
-**Output:**
+### Machine Learning Pipeline
 
-* `roc_curves_with_veto.png`
-* Cutoff comparisons with and without biomarker filtering
+* **Nested cross-validation**:
 
----
+  * Outer loop: 10 folds (performance estimation).
+  * Inner loop: 5 folds (Optuna hyperparameter tuning).
+* **Models**: XGBoost for actigraphy, multiple classifiers for questionnaire.
+* **Thresholds**:
 
-## Figures
+  * τ = 0.5 (default).
+  * τ* = Youden’s J (balanced Se/Sp).
+  * Custom τ for maximizing Se (questionnaire) or Sp (actigraphy).
+* Implemented in **Python 3.10** with scikit-learn, XGBoost, Optuna, statsmodels.
 
-### 🔹 **Elastic Net Feature Importance**
+### Two-Stage Screening
 
-* Visualized using bar plots showing standardized weights across 5 folds.
-* Top predictors: Q1 RBD (β = 1.84 ± 0.12), Q2 Smell (β = 0.91 ± 0.10), Age (β = -0.75 ± 0.08)
-
-<p align="center">
-  <img src="results/best_model/elastic_net_model_coefficients.png" alt="Elastic Net Feature Importance" width="600"/>
-</p>
-
----
-
-### 🔹 **ROC Curve Summary**
-
-* ROC curves for each model (Elastic Net, XGBoost) with AUC values and optimal τ thresholds.
-* Separate plots with and without HLA veto rules for improved interpretability.
-
-<p align="center">
-  <img src="results/stage_one_two_pipeline/roc_stage_I.png" alt="ROC Curves" width="600"/>
-</p>
+* Stage 1: Questionnaire (maximize sensitivity).
+* Stage 2: Actigraphy (maximize specificity).
+* Final rule: classified as iRBD if **both** stages positive.
 
 ---
 
-## Usage
+## Running the Pipelines
 
-To reproduce the results:
+### Questionnaire Model
 
 ```bash
-# Step 1: Preprocess data
-python pre_process_questionnaire.py
-
-# Step 2: Generate descriptive statistics
-python generate_table_one.py
-
-# Step 3: Run ML pipelines
-python main_full_and_cross_val.py
-
-# Step 4: Optimize class weight for XGBoost
-python optmize_xgboost_loss_weight.py
-
-# Step 5: Plot ROC curves
-python roc_curve_plots_veto_tresh.py
+bsub < run_ml_questionnaire.sh
 ```
 
-## Contact
+or locally:
 
-For questions or contributions, please contact \[Your Name] or open an issue in the repository.
+```bash
+python ml_questionnaire.py
+```
+
+### Actigraphy Model
+
+```bash
+bsub < run_ml_actigraphy.sh
+```
+
+or locally:
+
+```bash
+python ml_actigraphy.py
+```
+
+### Two-Stage Protocol
+
+```bash
+python two_stage_predictions.py
+```
 
 ---
 
-Let me know if you'd like this in markdown format or as a downloadable `.md` file.
+## Outputs
+
+* **Metrics**:
+
+  * `metrics/metrics_outer_folds_ci.csv` – performance with 95% CI.
+* **Predictions**:
+
+  * `predictions/predictions_outer_folds.csv` – subject-level predictions.
+* **Models**:
+
+  * Saved `.pkl` files per fold in `models/`.
+* **Figures**:
+
+  * ROC curves, confusion matrices, feature importance plots.
+
+---
+
+## Key Features
+
+* Reproducible **nested CV** with group-stratified folds (subject-level).
+* Configurable thresholds for clinical screening needs.
+* Two-stage diagnostic mimicry (questionnaire + wearable).
+* Confidence intervals for robust statistical reporting.

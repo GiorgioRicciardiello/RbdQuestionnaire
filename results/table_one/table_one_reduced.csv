@@ -1,7 +1,0 @@
-Variable,diagnosis=1,diagnosis=0,p-value,p-value formatted,Effect Size (Odds Ratio 95% CI),Stat Method,diagnosis=0 Mean (SD),diagnosis=1 Mean (SD),Effect Size,U statistic,Effect Size (r_rb)
-Gender^‡,69.5% (66/95),55.6% (74/133),0.04797999553519662,0.0480,"1.815 [1.04, 3.16]",Chi-Square Test,,,,,
-Age^Δ,,,0.007832369978767734,0.0078,,Mann-Whitney U test,64.54±11.75 (133),68.73±7.93 (95),-0.176,,
-Q1 RBD^Δ,,,1.6170792854949825e-33,1.6171e-33,,Mann-Whitney U test,0.11±0.23 (133),0.87±0.32 (95),,974.0,-0.721
-Q2 Smell^Δ,,,3.8282349322640084e-08,3.8282e-08,,Mann-Whitney U test,0.18±0.37 (133),0.51±0.48 (95),,4051.0,-0.306
-Q4 Constipation^Δ,,,2.931645835541845e-07,2.9316e-07,,Mann-Whitney U test,0.22±0.41 (133),0.54±0.49 (95),,4184.0,-0.288
-Q5 Orthostasis^Δ,,,0.2641411733764806,0.2641,,Mann-Whitney U test,0.24±0.41 (133),0.31±0.46 (95),,5880.0,-0.059
