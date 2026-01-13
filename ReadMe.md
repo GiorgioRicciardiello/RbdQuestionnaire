@@ -1,7 +1,3 @@
-Here’s a complete **README.md** draft for your project. It combines the scientific background you provided with the structure and scripts from the uploaded files.
-
----
-
 # A Two-Stage Questionnaire and Actigraphy Protocol for Remote Detection of Isolated REM Sleep Behavior Disorder
 
 ## Overview
